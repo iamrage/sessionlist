@@ -1,0 +1,71 @@
+----------------
+sessionlist v1.0
+c0ded by rage
+rage@0xrage.com
+twitter.com/alphis
+----------------
+
+Since v0.2
+----------
+-finally fixed the memory issues I had been having which forced me to dump data as it was found to prevent missing data. Now I can properly display data completely
+isolated from the packet processing thread as well as expose metadata associated with the session.
+-added metadata such as IPs and payload size (somewhat for debugging purposes but also useful for those interested in additional data involved in each hijacked session.
+-no longer constantly vomitting data to screen/session log file. Data is now displayed only if it hasn't been displayed already.
+
+Since v0.1
+----------
+-removed thread garbage which caused much data to be missed. Much better capture than before.
+-fixed minor bugs
+
+
+
+
+What is this?:
+
+This is a sniffer. The intent is to sniff HTTP packets and attempt to reconstruct interesting authentication data from websites that do not employ proper secure cookie auth.
+As such this tool only sniffs traffic going outbound with a destination port of 80 (by default but can be overriden via optional parameter)
+
+Does this work on SSL?:
+
+Sure. If you can perform SSL MITM you can use this tool on the interface with the decrypted traffic. Since such tools already exist I will not recreate their functionality here. For MITM attacks I prefer
+ettercap but to each his/her own. There are a few ways to attack SSL. SSL Strip does a good job of forcing unencrypted traffic if HTTP is available and ettercap can perform SSL MITM.
+
+Where is the sniffed data output?:
+
+It is output to a local file called sessions.txt and some stats are output _badly_ to stdout (working on creating a fully functional ncurses interface but that will have to wait)
+
+How do I use the data I've pulled out?:
+
+There are many ways to use the output of this tool. I have tested it using firefox + modifyheaders. I use facebook as a testbed so for that I make the following configuration in modify headers:
+
+MODIFY - User-Agent: [insert value]
+MODIFY - Cookie: [insert cookie]
+
+then click Start and reload www.facebook.com. If you sniffed valid data you should now be logged in and fully authenticated as the user you sniffed.
+
+Your output is fugly:
+
+Yes I know. I'm working on it in my spare time.
+
+
+Notes:
+
+This is a somewhat more complete version of sessionlist. However, there are probably various bugs that need fixing. In addition the UI is still being worked on (a proper ncurses UI which is currently
+nowhere near as sexy as I'd like it to be).
+
+Dependencies
+------------
+
+libpcap.so.1
+libncurses.so.5
+libpthread.so.0
+
+So ensure you have these first.
+
+Thanks
+------
+
+Thanks go out to storm for helping with beta testing. Your input has been very useful!
+
+ - rage
+
