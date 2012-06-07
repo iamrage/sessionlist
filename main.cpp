@@ -48,9 +48,6 @@ int main(int argc,char **argv)
 
 void *displaySessionData(void *ptr)
 {
-    //char wBuffer[128];
-    //int userInput;
-
     while(!killLoop)
     {
         //display data

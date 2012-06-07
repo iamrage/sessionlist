@@ -90,8 +90,6 @@ void *sessionlist_startcapture(void *notused)
 	{
 	    //process packets
 	    sessionlist_processPacket(packet,header.len);
-	    //display system
-	    //displayUsableSessionInfo();
 	}
 	//properly terminate
 	sessionlist_close(1);
@@ -175,8 +173,6 @@ void sessionlist_processPacket(const unsigned char *packet,int packetHeaderLen)
     //process
     if(plen<1) return;
     updateSessionlist(tether_src,tether_dst,tip_src,tip_dst,port,payload,plen);
-    //remove me this is a test
-    //displayUsableSessionInfo();
 }
 
 void updateSessionlist(char *eth_src,char *eth_dst,char *ip_src,char *ip_dst,unsigned int port,unsigned char *payload,int payloadSize)
@@ -264,16 +260,7 @@ void addSessionToSessionList(char *eth_src,char *eth_dst,char *ip_src,char *ip_d
     if(checkPayload(payload,si,payloadSize)) si.pData.push_back(npayload);
     else delete npayload;
     SESSION_LIST.push_back(si);
-    //
-    //strcpy(tIt->ether_src,eth_src);
-    //strcpy(tIt->ether_dst,eth_dst);
-    //strcpy(tIt->ip_src,ip_src);
-    //strcpy(tIt->ip_dst,ip_dst);
-    //tIt->port=port;
-    //tIt->cStarted=tIt->cEnded=tIt->cFound=tIt->lWritten=false; //added
-    //tIt=findSessionByCount(currentSessionSize+1);
 
-    //addPayloadToSession(tIt,payload,payloadSize);
     if(SESSION_DEBUG) printf("adding new session to session slot: %i\n",currentSessionSize+1);
 }
 
@@ -284,7 +271,7 @@ bool checkPayload(unsigned char *payload,std::list<SESSION_INFO>::iterator sessi
 {
     char *off;
     char *cOff;
-    //return true; //debug
+
     //check for interesting properties
     if(strcasestr((const char*)payload,(const char*)"host:")) return true;
     if(strcasestr((const char*)payload,(const char*)"user-agent:")) return true;
@@ -320,7 +307,7 @@ bool checkPayload(unsigned char *payload,SESSION_INFO session,int payloadSize)
 {
     char *off;
     char *cOff;
-    //return true; //debug
+
     //check for interesting properties
     if(strcasestr((const char*)payload,(const char*)"host:")) return true;
     if(strcasestr((const char*)payload,(const char*)"user-agent:")) return true;
