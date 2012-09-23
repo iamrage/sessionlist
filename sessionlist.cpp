@@ -1,12 +1,23 @@
 /*
+ * Main packet inspection and processing module.
+ *
+ * Copyright (C) 2012 Feiad Mohammed
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-Sessionlist v1.0
-written by rage
-
-This program was written for the lulz. Use responsibly.
-This program is freeware. I wrote this in my spare time so there may be bugs etc. I am not responsible if this program, say, eats your cat or blows up your house.
-Report any bugs etc to me at rage@0xrage.com if you'd like. General feedback can be sent there as well.
-*/
 #include "sessionlist.h"
 
 pcap_t *handle;			/* Session handle */
