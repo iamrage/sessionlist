@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-march=native -O2 -pipe
+CFLAGS=-march=native -O2 -pipe -w
 LDFLAGS=-lpcap -lpthread -lncurses
 
 all:
