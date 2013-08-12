@@ -63,7 +63,7 @@ void sessionlist_close(int);
 
 void sessionlist_processPacket(const unsigned char*,int);
 //
-typedef struct SESSION_INFO
+struct SESSION_INFO
 {
     char ether_src[32],ether_dst[32];
     char ip_src[16],ip_dst[16];

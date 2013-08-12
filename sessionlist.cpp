@@ -38,6 +38,7 @@ pthread_mutex_t tMutex;
 
 int sessionlist_init(char *dev,int cport)
 {
+	int nres;
     //set filter expression
     snprintf(s_filter_exp,16,"dst port %i",cport);
     //banner
@@ -80,7 +81,7 @@ int sessionlist_init(char *dev,int cport)
 
     //prep sessions output file
 	sessionFile=fopen("./sessions.txt","ab");
-	if(ftell(sessionFile)==0) fwrite(sBannerBuffer,strlen(sBannerBuffer),1,sessionFile);
+	if(ftell(sessionFile)==0) nres=fwrite(sBannerBuffer,strlen(sBannerBuffer),1,sessionFile);
 
 	//init ncurses
 	if(NCURSES_ENABLED)
@@ -363,6 +364,7 @@ void displayUsableSessionInfo()
     int n,n2,nSetup;
     int sessionCount;
     int sessionTotalCount;
+    int nres;
 
     //init
     it=SESSION_LIST.begin();
@@ -377,7 +379,7 @@ void displayUsableSessionInfo()
     if(SESSION_TO_FILE && SESSION_DEBUG)
     {
         nSetup=snprintf(wBufferSetup,128,"writing full session list as of now..[%i sessions]\n",sessionTotalCount);
-        fwrite(wBufferSetup,nSetup,1,sessionFile);
+        nres=fwrite(wBufferSetup,nSetup,1,sessionFile);
     }
     n2=snprintf(oBuffer,2048,"***************************************************\nsessionlist v1.0\n***************************************************\n");
     n2+=snprintf(&oBuffer[n2],2048-n2,"\tc0ded by rage\n***************************************************\n");
@@ -391,13 +393,13 @@ void displayUsableSessionInfo()
         //check for usable session data
         if(hasUsableSessionInfo(it,host,userAgent,cookie) && !it->lWritten) //added
         {
-            n=snprintf(wBuffer,10240,"Session %i of %i - IP: %s IP: %s - payload elements: %i\n",sessionCount,sessionTotalCount,it->ip_src,it->ip_dst,it->pData.size());
+            n=snprintf(wBuffer,10240,"Session %i of %i - IP: %s IP: %s - payload elements: %i\n",sessionCount,sessionTotalCount,it->ip_src,it->ip_dst,(int)it->pData.size());
             n+=snprintf(&wBuffer[n],10240-n,"Host: %s\nuser-agent: %s\ncookie: %s\n",host,userAgent,cookie);
             n2+=snprintf(&oBuffer[n2],2048-n2,"Found data for Host: %s\n",host);
 
             if(SESSION_TO_FILE && !it->lWritten)
             {
-                fwrite(wBuffer,n,1,sessionFile);
+                nres=fwrite(wBuffer,n,1,sessionFile);
                 it->lWritten=true; //added
                 totalFoundSessions++;
             }
@@ -409,14 +411,14 @@ void displayUsableSessionInfo()
     if(SESSION_TO_FILE && SESSION_DEBUG)
     {
         nSetup=snprintf(wBufferSetup,128,"end full session list as of now..[%i sessions]\n",sessionTotalCount);
-        fwrite(wBufferSetup,nSetup,1,sessionFile);
+        nres=fwrite(wBufferSetup,nSetup,1,sessionFile);
     }
     //unlock
     //pthread_mutex_unlock(&tMutex);
     //draw data to screen --moved to display thread
     //refresh();
     if(NCURSES_ENABLED) { clear(); printw("%s\n",oBuffer); refresh(); }
-    else { system("clear"); printf("%s\n",oBuffer); } //added (put clear back in ""s)
+    else { nres=system("clear"); printf("%s\n",oBuffer); } //added (put clear back in ""s)
     //flush
     fflush(sessionFile);
 }
@@ -436,7 +438,7 @@ bool hasUsableSessionInfo(std::list<SESSION_INFO>::iterator session,char *host,c
     {
         if(strcasestr((const char*)*pIt,"host:") && !hFound) // &&!hFound for getting only first
         {
-            extractData((const char*)*pIt,"host:",host,1023);
+            extractData((const char*)*pIt,(char*)"host:",host,1023);
             hFound=true;
         }
         if(strcasestr((const char*)*pIt,"cookie:") && !cFound) // added
@@ -446,7 +448,7 @@ bool hasUsableSessionInfo(std::list<SESSION_INFO>::iterator session,char *host,c
         }
         if(strcasestr((const char*)*pIt,"user-agent:") &&!uFound) // &&!uFound for getting only first
         {
-            extractData((const char*)*pIt,"user-agent:",userAgent,4095);
+            extractData((const char*)*pIt,(char*)"user-agent:",userAgent,4095);
             uFound=true;
         }
         pIt++;

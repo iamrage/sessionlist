@@ -18,14 +18,14 @@ typedef unsigned int tcp_seq;
 #define ETHER_ADDR_LEN	6
 
 	/* Ethernet header */
-	typedef struct sniff_ethernet {
+	struct sniff_ethernet {
 		u_char ether_dhost[ETHER_ADDR_LEN]; /* Destination host address */
 		u_char ether_shost[ETHER_ADDR_LEN]; /* Source host address */
 		u_short ether_type; /* IP? ARP? RARP? etc */
 	};
 
 	/* IP header */
-	typedef struct sniff_ip {
+	struct sniff_ip {
 		u_char ip_vhl;		/* version << 4 | header length >> 2 */
 		u_char ip_tos;		/* type of service */
 		u_short ip_len;		/* total length */
@@ -44,7 +44,7 @@ typedef unsigned int tcp_seq;
 	#define IP_V(ip)		(((ip)->ip_vhl) >> 4)
 
 	/* TCP header */
-	typedef struct sniff_tcp {
+	struct sniff_tcp {
 		u_short th_sport;	/* source port */
 		u_short th_dport;	/* destination port */
 		tcp_seq th_seq;		/* sequence number */
